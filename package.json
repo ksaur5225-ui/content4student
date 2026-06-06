@@ -1,0 +1,11 @@
+{
+  "name": "content4student-static",
+  "version": "1.0.0",
+  "description": "Static site generator from Google Sheets",
+  "scripts": {
+    "build": "node generate.js"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
