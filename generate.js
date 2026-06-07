@@ -2,14 +2,13 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 
-// 👉 अपनी Google Sheets CSV URL यहाँ डालें
+// 👉 अपनी Google Sheets की CSV URL यहाँ डालें (अभी वही है जो आपने शुरू में दी थी)
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQEOkfqthC4cdgJAm0mTOJfxCH4UuzIPHr1KMZDBNF0LUkrAJtfdhgzCEu0iNZTLhYmIvOIeRM1z5RZ/pub?gid=682596104&single=true&output=csv";
 
-// आउटपुट डायरेक्टरी
 const OUT_DIR = path.join(__dirname, 'public');
 const JOBS_DIR = path.join(OUT_DIR, 'jobs');
 
-// CSV पार्सर (आपके original जैसा, बस स्टैटिक डेटा के लिए)
+// CSV पार्सर (बिना किसी बदलाव के)
 function parseCSV(text) {
   let lines = []; let row = []; let cell = ''; let insideQuote = false;
   for (let i = 0; i < text.length; i++) {
@@ -56,12 +55,11 @@ function parseCSV(text) {
   return output;
 }
 
-// HTML Escaping function (for safety)
 function esc(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// जॉब डिटेल पेज का HTML टेम्पलेट
+// ========== JOB DETAIL PAGE (Header, Footer, SEO Box सहित) ==========
 function jobDetailPage(job) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -69,12 +67,25 @@ function jobDetailPage(job) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${esc(job.title)} - Content4Student | Govt Job 2026</title>
-    <meta name="description" content="${esc(job.title)} recruitment by ${esc(job.company)}. Check eligibility, vacancy, selection process & apply online. Latest Sarkari Job on Content4Student.">
+    <meta name="description" content="${esc(job.title)} recruitment by ${esc(job.company)}. Check eligibility, vacancy, selection process, important dates & apply online. Latest Sarkari Job on Content4Student (C4S).">
+    <meta name="keywords" content="${esc(job.title)}, ${esc(job.company)}, ${esc(job.department)}, ${esc(job.position)}, govt job 2026, sarkari naukri, content4student, C4S, latest jobs, free job alert, ${esc(job.state)} job">
     <meta name="robots" content="index, follow">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #f0f2f5; color: #333; padding: 15px; }
         .container { max-width: 1100px; margin: 0 auto; }
+        /* Header */
+        .header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 30px 20px; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 25px; }
+        .header h1 { font-size: 34px; font-weight: 800; margin-bottom: 5px; letter-spacing: 1px; }
+        .header p { font-size: 15px; opacity: 0.9; margin-bottom: 15px; }
+        .social-buttons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .social-buttons a { text-decoration: none; color: white; padding: 8px 15px; font-size: 13px; font-weight: 600; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+        .tg-btn { background: #0088cc; } .yt-btn { background: #ff0000; } .job-btn { background: #2e7d32; } .ca-btn { background: #ef6c00; } .sm-btn { background: #6a1b9a; }
+        /* SEO box */
+        .filter-seo-box { background: white; border-left: 5px solid #ef6c00; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .filter-seo-box h2 { font-size: 18px; color: #1e3c72; margin-bottom: 8px; font-weight: 700; }
+        .filter-seo-box p { font-size: 14px; color: #555; line-height: 1.6; }
+        /* Detail layout */
         #exclusivePageLayout { background: white; border-radius: 16px; padding: 30px 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); margin-top: 10px; border: 1px solid #eef2f5; }
         .back-btn { display: inline-flex; align-items: center; background: #f4f6f9; color: #222; padding: 11px 20px; font-weight: 700; text-decoration: none; font-size: 14px; margin-bottom: 25px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s ease; }
         .back-btn:hover { background: #e2e8f0; transform: translateX(-3px); }
@@ -100,7 +111,13 @@ function jobDetailPage(job) {
         .action-link:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(46,125,50,0.3); }
         .action-link.pdf { background: #c62828; box-shadow: 0 4px 6px rgba(198,40,40,0.2); }
         .action-link.pdf:hover { box-shadow: 0 6px 12px rgba(198,40,40,0.3); }
+        /* Footer */
+        .site-footer { background: #1e3c72; color: white; padding: 30px 20px; border-radius: 12px; margin-top: 40px; text-align: center; }
+        .site-footer h3 { font-size: 20px; margin-bottom: 12px; font-weight: 700; }
+        .site-footer p { font-size: 13.5px; opacity: 0.85; line-height: 1.6; max-width: 900px; margin: 0 auto 15px auto; }
+        .site-footer .footer-rights { font-size: 12px; opacity: 0.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-top: 15px; }
         @media (max-width: 600px) {
+            .header h1 { font-size: 24px !important; word-wrap: break-word; }
             .page-header-title { font-size: 22px; } .page-header-subtitle { font-size: 15px; }
             .action-button-panel { grid-template-columns: 1fr; gap: 20px; }
             .tab-trigger { padding: 10px 12px; font-size: 13px; }
@@ -109,6 +126,20 @@ function jobDetailPage(job) {
 </head>
 <body>
 <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <h1>CONTENT4STUDENT (C4S)</h1>
+        <p>Your Ultimate Hub for Govt Jobs, Daily Current Affairs & Free Study Material</p>
+        <div class="social-buttons">
+            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="tg-btn">Join Telegram</a>
+            <a href="https://youtube.com/@content4student" target="_blank" class="yt-btn">YouTube Channel</a>
+            <a href="../index.html" class="job-btn">Latest Jobs</a>
+            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="ca-btn">Current Affairs</a>
+            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="sm-btn">Study Material</a>
+        </div>
+    </div>
+
+    <!-- JOB DETAILS -->
     <div id="exclusivePageLayout">
         <a class="back-btn" href="../">← Back to Jobs Grid</a>
         <h2 class="page-header-title">${esc(job.title)}</h2>
@@ -145,20 +176,33 @@ function jobDetailPage(job) {
             <div class="action-box"><div class="action-label">Download Notification Document</div><a href="${esc(job.linkpdf)}" target="_blank" class="action-link pdf">Download PDF</a></div>
         </div>
     </div>
-    <script>
-        function switchTab(id, btn) {
-            document.querySelectorAll('.tab-content-block').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-trigger').forEach(el => el.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-        }
-    </script>
+
+    <!-- SEO CONTENT -->
+    <div class="filter-seo-box">
+        <h2>Latest Govt Job Alerts & Daily Current Affairs Updates 2026</h2>
+        <p>Welcome to <strong>Content4Student (C4S)</strong>, your trusted platform for instant <strong>Latest Govt Job Alerts</strong>, online recruitment details, and accurate Sarkari exam insights. We actively cover vacancy notifications from UPSC, SSC, Railways, Banking, and State Public Service Commissions. To ensure complete preparation, we also provide comprehensive <strong>Daily Current Affairs</strong> updates, interactive quiz resources, and free high-quality <strong>Study Material</strong> notes. Check the detailed eligibility, selection process, and important dates for this specific recruitment above. For more jobs and study material, visit our homepage or join our Telegram channel.</p>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <h3>About Content4Student (C4S)</h3>
+        <p><strong>Content4Student (C4S)</strong> is a dedicated online portal built to support government job aspirants across India. We aim to distribute timely, clear, and highly organized <strong>Sarkari Naukri Updates</strong>, exhaustive exam structures, and verified recruitment guidelines. By supplying targeted <strong>Daily Current Affairs</strong> notes, competitive exam syllabi, and multi-disciplinary <strong>Free Study Material</strong>, we help students optimize their preparation tracking. Subscribe to our official Telegram group and YouTube channel to stay connected with expert strategies and regular informational feeds.</p>
+        <div class="footer-rights">© 2026 Content4Student | Built for Academic Success & Reliable Job Tracking.</div>
+    </footer>
 </div>
+<script>
+    function switchTab(id, btn) {
+        document.querySelectorAll('.tab-content-block').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-trigger').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        btn.classList.add('active');
+    }
+</script>
 </body>
 </html>`;
 }
 
-// होमपेज HTML (आपके original जैसा, बस data preloaded)
+// ========== HOMEPAGE (Header, Filters, Cards, Footer सहित) ==========
 function homePage(jobs) {
   let cards = jobs.map((job, idx) => `
     <div class="job-card" onclick="location.href='jobs/${idx}.html'">
@@ -182,7 +226,6 @@ function homePage(jobs) {
     <meta name="keywords" content="content4student, C4S, Sarkari Job, Current Affairs, Study Material, Free Job Alert, Latest Jobs 2026, Daily Current Affairs PDF, Sarkari Exam">
     <meta name="robots" content="index, follow">
     <style>
-        /* सारी original CSS यहाँ डालें – बिना किसी बदलाव के */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #f0f2f5; color: #333; padding: 15px; }
         .container { max-width: 1100px; margin: 0 auto; }
@@ -247,7 +290,6 @@ function homePage(jobs) {
 </div>
 <script>
     const masterJobsData = ${JSON.stringify(jobs)};
-    // Filters logic (same as original)
     function populateFilters() {
         const depts = [...new Set(masterJobsData.map(j => j.department))].sort();
         const positions = [...new Set(masterJobsData.map(j => j.position))].sort();
@@ -286,22 +328,20 @@ function homePage(jobs) {
 </html>`;
 }
 
+// ========== MAIN GENERATE FUNCTION ==========
 async function generate() {
   const res = await fetch(CSV_URL);
   const text = await res.text();
   const jobs = parseCSV(text);
 
-  // बनाएँ फ़ोल्डर
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR);
   if (!fs.existsSync(JOBS_DIR)) fs.mkdirSync(JOBS_DIR);
 
-  // जॉब डिटेल पेजेस
   jobs.forEach((job, idx) => {
     const html = jobDetailPage(job);
     fs.writeFileSync(path.join(JOBS_DIR, `${idx}.html`), html);
   });
 
-  // होमपेज
   const indexHtml = homePage(jobs);
   fs.writeFileSync(path.join(OUT_DIR, 'index.html'), indexHtml);
 
