@@ -132,39 +132,7 @@ async function generate() {
 }
 
 generate();
-// ================== कॉमन हेडर (सभी पेजों के लिए) ==================
-function commonHeader(currentPage) {
-  return `<div class="header">
-        <h1>CONTENT4STUDENT (C4S)</h1>
-        <p>Your Ultimate Hub for Govt Jobs, Daily Current Affairs & Free Study Material</p>
-        <div class="social-buttons">
-            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="tg-btn">Join Telegram</a>
-            <a href="https://youtube.com/@content4student" target="_blank" class="yt-btn">YouTube Channel</a>
-            <a href="../index.html" class="job-btn">Latest Jobs</a>
-            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="ca-btn">Current Affairs</a>
-            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="sm-btn">Study Material</a>
-        </div>
-    </div>`;
-}
-
-// ================== कॉमन फ़ूटर ==================
-function commonFooter() {
-  return `<footer class="site-footer">
-        <h3>About Content4Student (C4S)</h3>
-        <p><strong>Content4Student (C4S)</strong> is a dedicated online portal built to support government job aspirants across India. We aim to distribute timely, clear, and highly organized <strong>Sarkari Naukri Updates</strong>, exhaustive exam structures, and verified recruitment guidelines. By supplying targeted <strong>Daily Current Affairs</strong> notes, competitive exam syllabi, and multi-disciplinary <strong>Free Study Material</strong>, we help students optimize their preparation tracking. Subscribe to our official Telegram group and YouTube channel to stay connected with expert strategies and regular informational feeds.</p>
-        <div class="footer-rights">© 2026 Content4Student | Built for Academic Success & Reliable Job Tracking.</div>
-    </footer>`;
-}
-
-// ================== कॉमन SEO बॉक्स ==================
-function seoBox() {
-  return `<div class="filter-seo-box">
-        <h2>Latest Govt Job Alerts & Daily Current Affairs Updates 2026</h2>
-        <p>Welcome to <strong>Content4Student (C4S)</strong>, your trusted platform for instant <strong>Latest Govt Job Alerts</strong>, online recruitment details, and accurate Sarkari exam insights. We actively cover vacancy notifications from UPSC, SSC, Railways, Banking, and State Public Service Commissions. To ensure complete preparation, we also provide comprehensive <strong>Daily Current Affairs</strong> updates, interactive quiz resources, and free high-quality <strong>Study Material</strong> notes. Check the detailed eligibility, selection process, and important dates for this specific recruitment above. For more jobs and study material, visit our homepage or join our Telegram channel.</p>
-    </div>`;
-}
-
-// ================== कॉमन CSS (सभी पेजों के लिए) ==================
+// ================== कॉमन CSS ==================
 function commonCSS() {
   return `<style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -234,12 +202,42 @@ function commonCSS() {
     </style>`;
 }
 
+// ================== कॉमन हेडर ==================
+function commonHeader(currentPage) {
+  return `<div class="header">
+        <h1>CONTENT4STUDENT (C4S)</h1>
+        <p>Your Ultimate Hub for Govt Jobs, Daily Current Affairs & Free Study Material</p>
+        <div class="social-buttons">
+            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="tg-btn">Join Telegram</a>
+            <a href="https://youtube.com/@content4student" target="_blank" class="yt-btn">YouTube Channel</a>
+            <a href="../index.html" class="job-btn">Latest Jobs</a>
+            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="ca-btn">Current Affairs</a>
+            <a href="https://t.me/dailycurrentaffairnotesbyGaurav" target="_blank" class="sm-btn">Study Material</a>
+        </div>
+    </div>`;
+}
+
+// ================== कॉमन फ़ूटर ==================
+function commonFooter() {
+  return `<footer class="site-footer">
+        <h3>About Content4Student (C4S)</h3>
+        <p><strong>Content4Student (C4S)</strong> is a dedicated online portal built to support government job aspirants across India. We aim to distribute timely, clear, and highly organized <strong>Sarkari Naukri Updates</strong>, exhaustive exam structures, and verified recruitment guidelines. By supplying targeted <strong>Daily Current Affairs</strong> notes, competitive exam syllabi, and multi-disciplinary <strong>Free Study Material</strong>, we help students optimize their preparation tracking. Subscribe to our official Telegram group and YouTube channel to stay connected with expert strategies and regular informational feeds.</p>
+        <div class="footer-rights">© 2026 Content4Student | Built for Academic Success & Reliable Job Tracking.</div>
+    </footer>`;
+}
+
+// ================== SEO बॉक्स ==================
+function seoBox() {
+  return `<div class="filter-seo-box">
+        <h2>Latest Govt Job Alerts & Daily Current Affairs Updates 2026</h2>
+        <p>Welcome to <strong>Content4Student (C4S)</strong>, your trusted platform for instant <strong>Latest Govt Job Alerts</strong>, online recruitment details, and accurate Sarkari exam insights. We actively cover vacancy notifications from UPSC, SSC, Railways, Banking, and State Public Service Commissions. To ensure complete preparation, we also provide comprehensive <strong>Daily Current Affairs</strong> updates, interactive quiz resources, and free high-quality <strong>Study Material</strong> notes.</p>
+    </div>`;
+}
 // ================== एक्सक्लूसिव डिटेल पेज ==================
 function jobDetailPage(job, allJobs, index, topDept, topQual, topPos, allStates) {
   const deptSlug = slugify(job.department);
   const relatedJobs = allJobs.filter(j => j.department === job.department && j.title !== job.title).slice(0,4);
   
-  // FAQ जेनरेशन
   const faqs = [
     { q: "What is the eligibility for this recruitment?", a: job.eligibility || "Please refer to the official notification for detailed eligibility criteria." },
     { q: "What is the last date to apply?", a: job.lastDate ? `The last date to apply is ${job.lastDate}.` : "Check the important dates section above." },
@@ -247,7 +245,7 @@ function jobDetailPage(job, allJobs, index, topDept, topQual, topPos, allStates)
     { q: "Where can I download the official notification?", a: `You can download the official PDF <a href="${job.linkpdf}" target="_blank">here</a>.` }
   ];
 
-  const faqHTML = faqs.map((faq, i) => `
+  const faqHTML = faqs.map(faq => `
     <div class="faq-item">
       <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('open')">
         ${faq.q} <span>▼</span>
@@ -255,7 +253,7 @@ function jobDetailPage(job, allJobs, index, topDept, topQual, topPos, allStates)
       <div class="faq-answer">${faq.a}</div>
     </div>`).join('');
 
-  const relatedHTML = relatedJobs.map((rj, idx) => {
+  const relatedHTML = relatedJobs.map(rj => {
     const rjIdx = allJobs.indexOf(rj);
     return `<div class="related-card" onclick="location.href='${rjIdx}.html'">
       <strong>${esc(rj.title)}</strong><br>
@@ -363,187 +361,279 @@ function jobDetailPage(job, allJobs, index, topDept, topQual, topPos, allStates)
         document.getElementById(id).classList.add('active');
         btn.classList.add('active');
     }
-    // Sticky buttons for mobile
-    window.addEventListener('scroll', function() {
-        var panel = document.querySelector('.action-button-panel');
-        if (window.innerWidth <= 600 && panel) {
-            if (window.scrollY > 300) { panel.style.position = 'fixed'; panel.style.bottom = '0'; panel.style.left = '0'; panel.style.right = '0'; panel.style.zIndex = '999'; }
-            else { panel.style.position = ''; }
-        }
-    });
 </script>
 </body>
 </html>`;
 }
-// ========== PART 3: SEO Website - Dynamic Meta & Sitemap Manager ==========
-// Is file ka istemal: Meta tags auto-update, sitemap entries add karna
+// ================== कैटेगरी कार्ड (होमपेज और डिटेल पेज दोनों के लिए) ==================
+function categoryCards(topDept, topQual, topPos, allStates) {
+  const top10States = allStates.slice(0, 10);
+  
+  return `<div style="margin-top:30px;">
+    <h2 style="font-size:22px; color:#1e3c72; text-align:center; margin-bottom:20px;">📂 Category Wise Jobs</h2>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:15px;">
+      
+      <div style="background:white; border-radius:10px; padding:20px; border:2px solid #e2e8f0; cursor:pointer;" onclick="location.href='../department/'">
+        <h3 style="color:#1e3c72; margin-bottom:12px;">🏢 Top Departments</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          ${topDept.map(d => `<a href="../department/${slugify(d)}.html" style="background:#e1f5fe; color:#0288d1; padding:5px 10px; border-radius:4px; text-decoration:none; font-size:12px; font-weight:600;">${esc(d)}</a>`).join('')}
+        </div>
+      </div>
+      
+      <div style="background:white; border-radius:10px; padding:20px; border:2px solid #e2e8f0; cursor:pointer;" onclick="location.href='../qualification/'">
+        <h3 style="color:#1e3c72; margin-bottom:12px;">🎓 Top Qualifications</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          ${topQual.map(q => `<a href="../qualification/${slugify(q)}.html" style="background:#fce4ec; color:#c62828; padding:5px 10px; border-radius:4px; text-decoration:none; font-size:12px; font-weight:600;">${esc(q)}</a>`).join('')}
+        </div>
+      </div>
+      
+      <div style="background:white; border-radius:10px; padding:20px; border:2px solid #e2e8f0; cursor:pointer;" onclick="location.href='../state/'">
+        <h3 style="color:#1e3c72; margin-bottom:12px;">📍 Top States</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          ${top10States.map(s => `<a href="../state/${slugify(s)}.html" style="background:#e8f5e9; color:#2e7d32; padding:5px 10px; border-radius:4px; text-decoration:none; font-size:12px; font-weight:600;">${esc(s)}</a>`).join('')}
+        </div>
+      </div>
+      
+      <div style="background:white; border-radius:10px; padding:20px; border:2px solid #e2e8f0; cursor:pointer;" onclick="location.href='../position/'">
+        <h3 style="color:#1e3c72; margin-bottom:12px;">💼 Top Positions</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          ${topPos.map(p => `<a href="../position/${slugify(p)}.html" style="background:#fff3e0; color:#ef6c00; padding:5px 10px; border-radius:4px; text-decoration:none; font-size:12px; font-weight:600;">${esc(p)}</a>`).join('')}
+        </div>
+      </div>
+      
+    </div>
+  </div>`;
+}
+// ================== 28 राज्यों की लिस्ट ==================
+function stateListHTML(allStates) {
+  const stateLinks = allStates
+    .filter(s => s && s !== 'All India')
+    .map(s => `<a href="../state/${slugify(s)}.html" style="color:white; text-decoration:none; padding:4px 8px; display:inline-block;">${esc(s)}</a>`)
+    .join(' | ');
+  
+  return `<div style="background:#1e3c72; border-radius:12px; padding:20px; margin-top:30px; text-align:center;">
+    <h3 style="color:white; margin-bottom:12px;">📍 State Wise Govt Jobs</h3>
+    <div style="font-size:13px; line-height:2; opacity:0.9;">${stateLinks}</div>
+  </div>`;
+}
+// ================== होमपेज ==================
+function homePage(jobs, results, admitCards, answerKeys, topDept, topQual, topPos, allStates) {
+  const trendingJobs = jobs.filter(j => j.trending === 'Yes');
+  const latestJobs = jobs.slice(0, 20);
+  
+  const jobCard = (job, idx) => {
+    const realIdx = jobs.indexOf(job);
+    return `<div class="job-card" onclick="location.href='jobs/${realIdx}.html'">
+      <span class="card-tag">Active</span>
+      <div class="job-title">${esc(job.title)}</div>
+      <div class="job-company">${esc(job.company)} (${esc(job.department)})</div>
+      <div class="job-meta"><strong>Qualification:</strong> ${esc(job.qualification)}</div>
+      <div class="job-meta"><strong>Location:</strong> ${esc(job.state)}</div>
+      ${job.lastDate ? `<div class="job-meta"><strong>Last Date:</strong> ${esc(job.lastDate)}</div>` : ''}
+      <div class="view-btn">View Full Details →</div>
+    </div>`;
+  };
 
-class SEOOptimizerV3 {
-  constructor() {
-    this.baseUrl = window.location.origin;
-    this.sitemapEntries = [];
-    this.metaConfig = {
-      title: "Default Title",
-      description: "Default Description",
-      keywords: "seo, website, optimization",
-      author: "Your Name",
-      robots: "index, follow",
-    };
-  }
+  const trendingHTML = trendingJobs.length ? `
+    <div style="margin-bottom:25px;">
+      <h2 style="color:#1e3c72; margin-bottom:12px;">🔥 Trending Govt Jobs</h2>
+      <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:10px;">
+        ${trendingJobs.map((j,i) => jobCard(j,i)).join('')}
+      </div>
+    </div>` : '';
 
-  // 1. Dynamic Meta Tag Updater
-  updateMetaTags(pageData) {
-    // PageData { title, desc, keywords, author, robots }
-    document.title = pageData.title || this.metaConfig.title;
-    
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute("content", pageData.desc || this.metaConfig.description);
-    } else {
-      this.createMetaTag("description", pageData.desc || this.metaConfig.description);
+  const otherTabs = `
+    <div style="margin:25px 0;">
+      <div style="display:flex; gap:8px; overflow-x:auto;">
+        <button class="tab-trigger active" onclick="switchHomeTab('tabResults',this)">📋 Results (${results.length})</button>
+        <button class="tab-trigger" onclick="switchHomeTab('tabAdmit',this)">🎫 Admit Cards (${admitCards.length})</button>
+        <button class="tab-trigger" onclick="switchHomeTab('tabAnswer',this)">🔑 Answer Keys (${answerKeys.length})</button>
+      </div>
+      <div id="tabResults" class="home-tab active" style="margin-top:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:10px;">
+        ${results.slice(0,6).map(r => jobCard(r)).join('')}
+      </div>
+      <div id="tabAdmit" class="home-tab" style="margin-top:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:10px; display:none;">
+        ${admitCards.slice(0,6).map(a => jobCard(a)).join('')}
+      </div>
+      <div id="tabAnswer" class="home-tab" style="margin-top:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:10px; display:none;">
+        ${answerKeys.slice(0,6).map(k => jobCard(k)).join('')}
+      </div>
+    </div>`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content4Student (C4S) | Latest Govt Jobs, Current Affairs & Study Material</title>
+    <meta name="description" content="Welcome to Content4Student (C4S). Get real-time updates on Latest Govt Jobs, Daily Current Affairs Notes, and Premium Free Study Material for UPSC, SSC, Bank, Railway & State Exams.">
+    <meta name="keywords" content="content4student, C4S, Sarkari Job, Current Affairs, Study Material, Free Job Alert, Latest Jobs 2026, Daily Current Affairs PDF, Sarkari Exam">
+    <meta name="robots" content="index, follow">
+    ${commonCSS()}
+    <style>
+      .job-card { background: white; border-radius: 10px; border-left: 5px solid #1e3c72; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; min-width: 280px; }
+      .card-tag { position: absolute; top: 12px; right: 12px; background: #e1f5fe; color: #0288d1; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; }
+      .job-title { font-size: 18px; color: #1e3c72; font-weight: bold; margin-bottom: 8px; padding-right: 45px; }
+      .job-company { font-size: 13px; color: #666; font-weight: 600; margin-bottom: 12px; }
+      .job-meta { font-size: 13px; margin-bottom: 6px; color: #555; }
+      .view-btn { display: block; text-align: center; background: #1e3c72; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 15px; }
+      .home-tab.active { display: grid !important; }
+    </style>
+</head>
+<body>
+<div class="container">
+    ${commonHeader('home')}
+    <div class="filter-seo-box">
+        <h2>Latest Govt Job Alerts & Daily Current Affairs Updates 2026</h2>
+        <p>Welcome to <strong>Content4Student (C4S)</strong>, your trusted platform for instant <strong>Latest Govt Job Alerts</strong>, online recruitment details, and accurate Sarkari exam insights. Use the category cards below to explore jobs by department, qualification, state, or position.</p>
+    </div>
+    ${trendingHTML}
+    <h2 style="color:#1e3c72; margin-bottom:12px;">📌 Latest Job Alerts</h2>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:20px;">
+      ${latestJobs.map(j => jobCard(j)).join('')}
+    </div>
+    ${otherTabs}
+    ${categoryCards(topDept, topQual, topPos, allStates)}
+    ${stateListHTML(allStates)}
+    ${commonFooter()}
+</div>
+<script>
+    function switchHomeTab(tabId, btn) {
+        document.querySelectorAll('.home-tab').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-trigger').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
     }
+</script>
+</body>
+</html>`;
+}
+// ================== कैटेगरी पेज (डिपार्टमेंट, क्वालिफिकेशन, स्टेट, पोज़िशन) ==================
+function categoryPage(categoryName, items, categoryType, allJobs) {
+  const typeLabel = { department: 'Department', qualification: 'Qualification', state: 'State', position: 'Position' }[categoryType] || '';
+  const cardHTML = items.map((j, i) => {
+    const realIdx = allJobs.indexOf(j);
+    return `<div class="job-card" onclick="location.href='../jobs/${realIdx}.html'">
+      <span class="card-tag">${esc(j.postType)}</span>
+      <div class="job-title">${esc(j.title)}</div>
+      <div class="job-company">${esc(j.company)} (${esc(j.department)})</div>
+      <div class="job-meta"><strong>Qualification:</strong> ${esc(j.qualification)}</div>
+      <div class="job-meta"><strong>Location:</strong> ${esc(j.state)}</div>
+      ${j.lastDate ? `<div class="job-meta"><strong>Last Date:</strong> ${esc(j.lastDate)}</div>` : ''}
+      <div class="view-btn">View Full Details →</div>
+    </div>`;
+  }).join('');
 
-    const metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (metaKeywords) {
-      metaKeywords.setAttribute("content", pageData.keywords || this.metaConfig.keywords);
-    } else {
-      this.createMetaTag("keywords", pageData.keywords || this.metaConfig.keywords);
-    }
-
-    const metaRobots = document.querySelector('meta[name="robots"]');
-    if (metaRobots) {
-      metaRobots.setAttribute("content", pageData.robots || this.metaConfig.robots);
-    } else {
-      this.createMetaTag("robots", pageData.robots || this.metaConfig.robots);
-    }
-
-    // Open Graph (Social Media)
-    this.updateOGTags(pageData);
-  }
-
-  createMetaTag(name, content) {
-    let meta = document.createElement("meta");
-    meta.setAttribute("name", name);
-    meta.setAttribute("content", content);
-    document.head.appendChild(meta);
-  }
-
-  updateOGTags(data) {
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    let ogDesc = document.querySelector('meta[property="og:description"]');
-    if (!ogTitle) {
-      ogTitle = document.createElement("meta");
-      ogTitle.setAttribute("property", "og:title");
-      document.head.appendChild(ogTitle);
-    }
-    if (!ogDesc) {
-      ogDesc = document.createElement("meta");
-      ogDesc.setAttribute("property", "og:description");
-      document.head.appendChild(ogDesc);
-    }
-    ogTitle.setAttribute("content", data.title || this.metaConfig.title);
-    ogDesc.setAttribute("content", data.desc || this.metaConfig.description);
-  }
-
-  // 2. Sitemap Entry Add Karna (XML format ke liye)
-  addSitemapEntry(path, priority = "0.8", changefreq = "weekly") {
-    const entry = {
-      loc: `${this.baseUrl}${path}`,
-      lastmod: new Date().toISOString().split('T')[0],
-      changefreq: changefreq,
-      priority: priority,
-    };
-    this.sitemapEntries.push(entry);
-    console.log("Sitemap entry added:", entry);
-    return entry;
-  }
-
-  // 3. Generate XML Sitemap String
-  generateXMLSitemap() {
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-    this.sitemapEntries.forEach(entry => {
-      xml += '  <url>\n';
-      xml += `    <loc>${entry.loc}</loc>\n`;
-      xml += `    <lastmod>${entry.lastmod}</lastmod>\n`;
-      xml += `    <changefreq>${entry.changefreq}</changefreq>\n`;
-      xml += `    <priority>${entry.priority}</priority>\n`;
-      xml += '  </url>\n';
-    });
-    xml += '</urlset>';
-    return xml;
-  }
-
-  // 4. JSON-LD Structured Data (Rich Results)
-  addStructuredData(type, data) {
-    let script = document.createElement("script");
-    script.setAttribute("type", "application/ld+json");
-    let structuredData = {};
-    if (type === "Article") {
-      structuredData = {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        headline: data.headline,
-        author: data.author,
-        datePublished: data.datePublished,
-        image: data.image,
-      };
-    } else if (type === "BreadcrumbList") {
-      structuredData = {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: data.items.map((item, idx) => ({
-          "@type": "ListItem",
-          position: idx + 1,
-          name: item.name,
-          item: item.url,
-        })),
-      };
-    }
-    script.textContent = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-  }
-
-  // 5. Canonical URL Fix (Duplicate content se bachata hai)
-  setCanonicalURL(url) {
-    let existingCanonical = document.querySelector('link[rel="canonical"]');
-    if (existingCanonical) {
-      existingCanonical.setAttribute("href", url);
-    } else {
-      let canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      canonical.setAttribute("href", url);
-      document.head.appendChild(canonical);
-    }
-  }
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${esc(categoryName)} ${typeLabel} Jobs 2026 - Content4Student</title>
+    <meta name="description" content="Latest ${esc(categoryName)} ${typeLabel} Govt Jobs 2026. Find all upcoming and current vacancies, results, admit cards for ${esc(categoryName)} on Content4Student.">
+    <meta name="robots" content="index, follow">
+    ${commonCSS()}
+    <style>
+      .job-card { background: white; border-radius: 10px; border-left: 5px solid #1e3c72; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; margin-bottom: 15px; position: relative; }
+      .card-tag { position: absolute; top: 12px; right: 12px; background: #e1f5fe; color: #0288d1; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; }
+      .job-title { font-size: 18px; color: #1e3c72; font-weight: bold; margin-bottom: 8px; padding-right: 45px; }
+      .job-company { font-size: 13px; color: #666; font-weight: 600; margin-bottom: 12px; }
+      .job-meta { font-size: 13px; margin-bottom: 6px; color: #555; }
+      .view-btn { display: block; text-align: center; background: #1e3c72; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    ${commonHeader('category')}
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a> &raquo; ${esc(categoryName)} ${typeLabel}
+    </div>
+    <h2 style="color:#1e3c72; margin-bottom:15px;">📂 ${esc(categoryName)} ${typeLabel} Govt Jobs 2026</h2>
+    ${seoBox()}
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:20px;">
+      ${cardHTML || '<p>No active jobs found in this category.</p>'}
+    </div>
+    ${commonFooter()}
+</div>
+</body>
+</html>`;
 }
 
-// ---------- Example Usage (Jab Page Load ho) ----------
-const seoV3 = new SEOOptimizerV3();
+// ================== अंतिम जेनरेट फ़ंक्शन ==================
+async function generate() {
+  const res = await fetch(CSV_URL);
+  const text = await res.text();
+  const allData = parseCSV(text);
 
-// Agar aapka page ka data dynamic hai
-window.addEventListener("DOMContentLoaded", () => {
-  seoV3.updateMetaTags({
-    title: "My SEO Website - Part 3 Working",
-    desc: "Yeh dynamic meta tags aur sitemap generator ka example hai",
-    keywords: "walletab, seo, javascript, code recovery",
-    robots: "index, follow",
+  // फोल्डर बनाएँ
+  [OUT_DIR, JOBS_DIR, DEPT_DIR, QUAL_DIR, STATE_DIR, POS_DIR].forEach(dir => {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   });
 
-  seoV3.addSitemapEntry("/home", "1.0", "daily");
-  seoV3.addSitemapEntry("/about", "0.8", "weekly");
-  seoV3.addSitemapEntry("/services/seo", "0.9", "monthly");
+  // अलग-अलग टाइप
+  const jobs = allData.filter(j => j.postType.toLowerCase() === 'job');
+  const results = allData.filter(j => j.postType.toLowerCase() === 'result');
+  const admitCards = allData.filter(j => j.postType.toLowerCase() === 'admit card');
+  const answerKeys = allData.filter(j => j.postType.toLowerCase() === 'answer key');
 
-  seoV3.setCanonicalURL(window.location.href.split("?")[0]); // Remove query params
+  // टॉप कैटेगरी
+  const getTop = (arr, key) => {
+    const count = {};
+    arr.forEach(item => { if (item[key]) { const val = item[key].trim(); if (val) count[val] = (count[val] || 0) + 1; } });
+    return Object.entries(count).sort((a,b) => b[1]-a[1]).slice(0,10).map(e => e[0]);
+  };
+  const topDept = getTop(jobs, 'department');
+  const topQual = getTop(jobs, 'qualification');
+  const topPos = getTop(jobs, 'position');
+  const allStates = [...new Set(jobs.map(j => j.state).filter(s => s && s !== 'All India'))].sort();
 
-  // Console mein XML sitemap dekhne ke liye
-  console.log("Generated Sitemap:\n", seoV3.generateXMLSitemap());
-
-  // Agar structured data chahiye
-  seoV3.addStructuredData("Article", {
-    headline: "SEO Website Part 3 Recovery",
-    author: "Developer",
-    datePublished: "2026-06-07",
-    image: "https://yoursite.com/seo-image.jpg",
+  // === जॉब डिटेल पेज ===
+  jobs.forEach((job, idx) => {
+    const html = jobDetailPage(job, jobs, idx, topDept, topQual, topPos, allStates);
+    fs.writeFileSync(path.join(JOBS_DIR, `${idx}.html`), html);
   });
-});
+
+  // === होमपेज ===
+  const indexHtml = homePage(jobs, results, admitCards, answerKeys, topDept, topQual, topPos, allStates);
+  fs.writeFileSync(path.join(OUT_DIR, 'index.html'), indexHtml);
+
+  // === कैटेगरी पेज (डिपार्टमेंट) ===
+  const deptGroups = {};
+  jobs.forEach(j => { if (j.department) { const d = j.department.trim(); if (!deptGroups[d]) deptGroups[d] = []; deptGroups[d].push(j); } });
+  Object.entries(deptGroups).forEach(([dept, items]) => {
+    const slug = slugify(dept);
+    const html = categoryPage(dept, items, 'department', jobs);
+    fs.writeFileSync(path.join(DEPT_DIR, `${slug}.html`), html);
+  });
+
+  // === कैटेगरी पेज (क्वालिफिकेशन) ===
+  const qualGroups = {};
+  jobs.forEach(j => { if (j.qualification) { const q = j.qualification.trim(); if (!qualGroups[q]) qualGroups[q] = []; qualGroups[q].push(j); } });
+  Object.entries(qualGroups).forEach(([qual, items]) => {
+    const slug = slugify(qual);
+    const html = categoryPage(qual, items, 'qualification', jobs);
+    fs.writeFileSync(path.join(QUAL_DIR, `${slug}.html`), html);
+  });
+
+  // === कैटेगरी पेज (स्टेट) ===
+  const stateGroups = {};
+  jobs.forEach(j => { if (j.state) { const s = j.state.trim(); if (!stateGroups[s]) stateGroups[s] = []; stateGroups[s].push(j); } });
+  Object.entries(stateGroups).forEach(([state, items]) => {
+    const slug = slugify(state);
+    const html = categoryPage(state, items, 'state', jobs);
+    fs.writeFileSync(path.join(STATE_DIR, `${slug}.html`), html);
+  });
+
+  // === कैटेगरी पेज (पोज़िशन) ===
+  const posGroups = {};
+  jobs.forEach(j => { if (j.position) { const p = j.position.trim(); if (!posGroups[p]) posGroups[p] = []; posGroups[p].push(j); } });
+  Object.entries(posGroups).forEach(([pos, items]) => {
+    const slug = slugify(pos);
+    const html = categoryPage(pos, items, 'position', jobs);
+    fs.writeFileSync(path.join(POS_DIR, `${slug}.html`), html);
+  });
+
+  console.log(`✅ Done! Generated ${jobs.length} jobs, homepage, and category pages.`);
+}
+
+generate();
